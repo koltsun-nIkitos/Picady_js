@@ -190,6 +190,77 @@ body {
 .sidebar {
   width: 31%;
 }
+
+.login{
+  background-color: #fafafa;
+  border: 1px solid #e8e8e8;
+  padding: 15px 25px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+}
+
+.login-title{
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #595959;
+}
+
+.login-input{
+  display: block;
+  background-color: #fff;
+  border: 1px solid #e8e8e8;
+  padding: 5px 15px;
+  margin-bottom: 15px;
+}
+
+.login-forget{
+  text-align: center;
+  font-size: 14px;
+  text-decoration: none;
+  color: #757575;
+  margin-bottom: 10px;
+}
+
+.login-signin{
+  background: #faad14;
+  border-radius: 4px;
+  border: none;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  padding: 13px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.login-signin:hover{
+  filter: opacity(80%);
+  color: #595959;
+}
+
+.login-signin:active{
+  filter: brightness(80%);
+}
+
+.login-signup{
+  text-align: center;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #d48806;
+  margin-bottom: 10px;
+  font-weight: bold;;
+}
+
 .user {
   background-color: #fafafa;
   border: 1px solid #e8e8e8;
@@ -197,6 +268,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  display: none;
 }
 .user-info {
   display: flex;
@@ -219,6 +291,7 @@ body {
   fill: #000;
 }
 .sidebar-nav {
+  display: none;
   background-color: #fff;
 }
 .sidebar-menu {
@@ -272,7 +345,7 @@ body {
   fill: #ffc53d;
 }
 .button-new-post {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   width: 100%;
