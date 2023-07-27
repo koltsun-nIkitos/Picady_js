@@ -268,7 +268,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  display: none;
+  display: flex;
 }
 .user-info {
   display: flex;
