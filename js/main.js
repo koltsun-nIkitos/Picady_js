@@ -1,5 +1,8 @@
 "use strict";
 
+
+// import validator from './validate.js';
+
 const menuToggle = document.querySelector('#menu-toggle');
 const menu = document.querySelector('.sidebar');
 
@@ -16,6 +19,7 @@ const loginSignup = document.querySelector('.login-signup');
 
 const userElem = document.querySelector(".user");
 const userNameElem = document.querySelector(".user-name");
+
 
 
 const listUsers = [
@@ -52,6 +56,12 @@ const setUsers = {
   },
 
   signUp(email, password, handler) {
+
+    if (!email.trim() || !password.trim()){
+      alert('Введите данные');
+      return
+    }
+
     if (!this.getUser(email)){
       const user = { email, password, displayName: email }
       listUsers.push(user);
@@ -87,12 +97,11 @@ const toogleAuthDom = ()=>{
 
 loginForm.addEventListener('submit', (event)=>{
   event.preventDefault();
-
   const emailValue = emailInput.value;
   const passwordValue = passwordInput.value;
 
   setUsers.logIn(emailValue, passwordValue, toogleAuthDom);
-
+  loginForm.reset(); 
 });
 
 loginSignup.addEventListener('click', event =>{
@@ -101,7 +110,7 @@ loginSignup.addEventListener('click', event =>{
   const passwordValue = passwordInput.value;
 
   setUsers.signUp(emailValue, passwordValue, toogleAuthDom);
-
+  loginForm.reset();
 })
 
 toogleAuthDom();

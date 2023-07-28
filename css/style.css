@@ -265,15 +265,17 @@ body {
   background-color: #fafafa;
   border: 1px solid #e8e8e8;
   padding: 15px 25px;
+}
+.user-container{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  display: flex;
 }
 .user-info {
   display: flex;
   align-items: center;
   text-decoration: none;
+  margin-right: auto;
 }
 .user-avatar {
   border-radius: 50%;
@@ -285,11 +287,67 @@ body {
   line-height: 24px;
   color: #595959;
 }
+.exit, .edit{
+  padding: 5px;
+}
+
+.edit-title{
+  text-align: center;
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #595959;
+}
+
+.edit-label{
+  display: block;
+  text-align: center;
+  border: radius 2px;
+  border: none;
+  text-align: center;
+  font-size: 14px;
+  text-decoration: none;
+  color: #757575;
+  margin-bottom: 15px
+}
+
+.edit-btn{
+  background: #faad14;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  padding: 13px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  width: 100%;
+  margin-top: 15px;
+  border: none;
+}
+
+.edit-input{
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #e8e8e8;
+  margin-top: 10px;
+}
+
 .icon-exit {
   width: 20px;
   height: 20px;
   fill: #000;
 }
+.icon-edit{
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+
 .sidebar-nav {
   display: none;
   background-color: #fff;

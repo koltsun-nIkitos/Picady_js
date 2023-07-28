@@ -215,17 +215,48 @@
       </div>
       <!-- ./login -->
       <div class="user">
-        <a href="#" class="user-info">
-          <img width="40" height="40" src="img/avatar.jpeg" alt="photo: user" class="user-avatar">
-          <span class="user-name">KoltsunNik</span>
-        </a>
-        <!-- /.user-info -->
-        <a href="#" class="exit">
-          <svg class="icon icon-exit">
-            <use xlink:href="img/icons.svg#exit"></use>
-          </svg>
-        </a>
-        <!-- /.exit -->
+        <div class="user-container">
+          <a href="#" class="user-info">
+            <img width="40" height="40" src="img/avatar.jpeg" alt="photo: user" class="user-avatar">
+            <span class="user-name">KoltsunNik</span>
+          </a>
+          <!-- /.user-info -->
+          <a href="#" class="edit">
+            <img src="img/edit.svg" class="icon icon-edit" alt="редактировать">
+          </a>
+  
+          <a href="#" class="exit">
+            <svg class="icon icon-exit">
+              <use xlink:href="img/icons.svg#exit"></use>
+            </svg>
+          </a>
+          <!-- /.exit -->
+        </div>
+
+        <form class="edit-container">
+          <h2 class="edit-title">Редактировать</h2>
+
+          <label class="edit-label">Ваш логин
+            <input 
+              type="text" 
+              name="username" 
+              class="edit-input edit-username"
+              minlength="3"
+              placeholder="логин">
+          </label>
+
+          <label class="edit-label">Ваше фото
+            <input 
+              type="text" 
+              name="photo" 
+              class="edit-input edit-photo"
+              minlength="3"
+              placeholder="URL-фото">
+          </label>
+
+          <button class="edit-btn">Сохранить</button>
+        </form>
+        
       </div>
       <!-- /.user -->
       <nav class="sidebar-nav">
@@ -277,6 +308,6 @@
     <!-- /.sidebar -->
   </div>
   <!-- /.content -->
-  <script src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
