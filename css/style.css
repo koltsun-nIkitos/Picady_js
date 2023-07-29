@@ -291,8 +291,15 @@ body {
   padding: 5px;
 }
 
+.edit-container{
+  display: none;
+}
+
+.edit-container.visible{
+  display: block;
+}
+
 .edit-title{
-  text-align: center;
   text-align: center;
   margin-bottom: 15px;
   font-size: 16px;
@@ -302,7 +309,6 @@ body {
 
 .edit-label{
   display: block;
-  text-align: center;
   border: radius 2px;
   border: none;
   text-align: center;
