@@ -94,9 +94,16 @@ body {
   align-items: flex-start;
   justify-content: space-between;
 }
+
 .posts {
+  display: none;
   width: 67%;
 }
+
+.posts.visible{
+  display: block;
+}
+
 .post {
   background-color: #fff;
   border: 1px solid #e8e8e8;
@@ -114,22 +121,29 @@ body {
   font-weight: 600;
   font-size: 16px;
   line-height: 24px;
+  word-break: break-all;
 }
 .post-text {
   color: #262626;
   font-weight: normal;
   font-size: 14px;
   line-height: 22px;
+  word-break: break-all;
 }
 .tags {
   margin-bottom: 22px;
+  color: #bfbfbf;
+  word-break: break-all;
 }
 .tag {
   color: #bfbfbf;
   font-size: 14px;
   line-height: 22px;
-  margin-right: 10px;
+  margin-left: 10px;
   text-decoration: none;
+}
+.tag:first-child{
+  margin-left: 0;
 }
 .post-footer {
   border-top: 1px solid #e8e8e8;
@@ -415,6 +429,9 @@ body {
   width: 100%;
   margin-top: 20px;
 }
+.button-new-post.visible{
+  display: flex;
+}
 .icon-fire {
   fill: #fff;
   width: 11px;
@@ -482,18 +499,27 @@ body {
   color: #ffffff;
 }
 .add-post {
-  display: flex;
+  width: 67%;
+  display: none;
   flex-direction: column;
 }
+
+.add-post.visible{
+  display: flex;
+}
 .add-title,
-.add-text {
+.add-text, 
+.add-tags {
   background: #ffffff;
   border: 1px solid #e8e8e8;
   padding: 23px 30px;
   margin-bottom: 16px;
+  word-break: break-all;
 }
 .add-text {
   min-height: 362px;
+  resize: none;
+  word-break: break-all;
 }
 .add-button {
   width: 100%;

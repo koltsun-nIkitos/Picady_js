@@ -26,6 +26,8 @@ const editPhotoURL = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector('.user-avatar');
 const postWrapper = document.querySelector('.posts');
 
+const buttonNewPost = document.querySelector('.button-new-post');
+const addPostElem = document.querySelector(".add-post");
 
 const listUsers = [
   {
@@ -115,8 +117,11 @@ const setPosts = {
       title: 'Плохо, когда одинаковые посты, набирают разные лайки',
       text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первую подпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
       tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: 'Katty Parry',
-      date: '29.07.2023, 15:31',
+      author: {
+        displayName: 'Katty Parry', 
+        photo: 'https://lyrictum.com/wp-content/uploads/2021/09/katy-perry-15.jpg',
+      },
+      date: '29.07.2023, 16:31',
       likes: 6507,
       comments: 226,
     },
@@ -124,13 +129,44 @@ const setPosts = {
       title: 'Плохо, когда одинаковые посты, набирают разные лайки',
       text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первую подпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
       tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: 'KoltsNik',
-      date: '29.07.2023, 16:45',
+      author: {
+        displayName: 'KoltsNik',
+        photo: 'https://sun9-21.userapi.com/impg/M6AQsOxaGSAhBiG5R3uTCJnERw9zEjkjnIOUAw/ro2cKreea04.jpg?size=1543x2160&quality=95&sign=3b231c08ae27ed1eda704de120b1b1d3&type=album'
+      },
+      date: '29.07.2023, 12:30',
       likes: 45,
       comments: 2,
     },
     
   ],
+
+  addPost(title, text, tags, handler){
+
+    this.AllPosts.unshift({
+      title,
+      text,
+      tags: tags.split(',').map(item => item.trim()),
+      author:{
+        displayName: setUsers.user.displayName,
+        photo: setUsers.user.photo,
+      },
+      date: new Date().toLocaleString(navigator.language, 
+        {
+          day: '2-digit', 
+          month:'2-digit', 
+          year:'numeric', 
+          hour: '2-digit', 
+          minute:'2-digit'
+        }
+      ),
+      likes: 0,
+      comments: 0,
+    });
+
+    if(handler){
+      handler();
+    }
+  },
 };
 
 const toogleAuthDom = ()=>{
@@ -141,16 +177,26 @@ const toogleAuthDom = ()=>{
     userElem.style.display = '';
     userNameElem.textContent = user.displayName;
     userAvatarElem.src = user.photo || userAvatarElem.src;
+    buttonNewPost.classList.add('visible');
   }else{
     loginElem.style.display = '';
     userElem.style.display = 'none';
+    buttonNewPost.classList.remove('visible');
+    addPostElem.classList.remove('visible');
+    postWrapper.classList.add('visible');
+
   };
 }
 
-
-
+const showAddPost = ()=>{
+  addPostElem.classList.add('visible');
+  postWrapper.classList.remove('visible');
+};
 
 const showAllPosts= () =>{
+
+
+
   let postsHTML = '';
 
   setPosts.AllPosts.forEach((post) =>{
@@ -165,58 +211,63 @@ const showAllPosts= () =>{
         </p>
 
         <div class="tags">
-          ${tags}
-          <a href="#" class="tag">#свежее</a>
+          ${tags.map(tag => `<a href="#" class="tag">#${tag}</a>`).join("")}
         </div>
         <!-- /.tags -->
-    </div>
-    <!-- /.post-body -->
+      </div>
+      <!-- /.post-body -->
 
-    <div class="post-footer">
-      <div class="post-buttons">
-        <button class="post-button likes">
-          <svg width="19" height="20" class="icon icon-like">
-            <use xlink:href="img/icons.svg#like"></use>
-          </svg>
-          <span class="likes-counter">${likes}</span>
-        </button>
-        <button class="post-button comments">
-          <svg width="21" height="21" class="icon icon-comment">
-            <use xlink:href="img/icons.svg#comment"></use>
-          </svg>
-          <span class="comments-counter">${comments}</span>
-        </button>
-        <button class="post-button save">
-          <svg width="19" height="19" class="icon icon-save">
-            <use xlink:href="img/icons.svg#save"></use>
-          </svg>
-        </button>
-        <button class="post-button share">
-          <svg width="17" height="19" class="icon icon-share">
-            <use xlink:href="img/icons.svg#share"></use>
-          </svg>
-        </button>
-      </div>
-      <!-- /.post-buttons -->
-      <div class="post-author">
-        <div class="author-about">
-          <a href="#" class="author-username">${author}</a>
-          <span class="post-time">${date}</span>
+      <div class="post-footer">
+        <div class="post-buttons">
+          <button class="post-button likes">
+            <svg width="19" height="20" class="icon icon-like">
+              <use xlink:href="img/icons.svg#like"></use>
+            </svg>
+            <span class="likes-counter">${likes}</span>
+          </button>
+          <button class="post-button comments">
+            <svg width="21" height="21" class="icon icon-comment">
+              <use xlink:href="img/icons.svg#comment"></use>
+            </svg>
+            <span class="comments-counter">${comments}</span>
+          </button>
+          <button class="post-button save">
+            <svg width="19" height="19" class="icon icon-save">
+              <use xlink:href="img/icons.svg#save"></use>
+            </svg>
+          </button>
+          <button class="post-button share">
+            <svg width="17" height="19" class="icon icon-share">
+              <use xlink:href="img/icons.svg#share"></use>
+            </svg>
+          </button>
         </div>
-        <a href="#" class="author-link"><img src="img/avatar.jpeg" alt="avatar" class="author-avatar"></a>
+        <!-- /.post-buttons -->
+        <div class="post-author">
+          <div class="author-about">
+            <a href="#" class="author-username">${author.displayName}</a>
+            <span class="post-time">${date}</span>
+          </div>
+          <a href="#" class="author-link">
+            <img 
+              style="object-fit: cover;" src="${author.photo || "../img/avatar.jpeg" }" alt="avatar" class="author-avatar">
+            </a>
+        </div>
+        <!-- /.post-author -->
       </div>
-      <!-- /.post-author -->
-    </div>
-    <!-- /.post-footer -->
-  </section>
+      <!-- /.post-footer -->
+    </section>
     `
   });
 
   postWrapper.innerHTML = postsHTML;
+
+  addPostElem.classList.remove('visible');
+  postWrapper.classList.add('visible');
 }
 
-const init = () =>{
 
+const init = () =>{
 
   menuToggle.addEventListener('click', function (event) {
     event.preventDefault();
@@ -263,6 +314,29 @@ const init = () =>{
     setUsers.editUser(editUsername.value, editPhotoURL.value, toogleAuthDom);
     editContainer.classList.remove('visible');
   })
+
+  buttonNewPost.addEventListener('click', (event)=>{
+    event.preventDefault();
+    showAddPost();
+  });
+
+  addPostElem.addEventListener('submit', (event)=>{
+    event.preventDefault();
+    const { title, text, tags } = addPostElem.elements;
+    if (title.value.length < 6){
+      alert('Слишком короткий заголовок');
+      return;
+    }
+    if(text.value.length < 50){
+      alert("Слишком короткий пост");
+      return;
+    }
+
+    setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
+
+    addPostElem.classList.remove('visible');
+    addPostElem.reset();
+  });
 }
 
 document.addEventListener('DOMContentLoaded', init());

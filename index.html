@@ -46,8 +46,26 @@
 
   <div class="content">
     <main class="posts">
+
     </main>
     <!-- /.posts -->
+
+    <form action="#" class="add-post">
+      <input type="text" name="title" class="add-title" placeholder="Заголовок поста">
+      <textarea name="text" class="add-text" placeholder="Текст вашего поста"></textarea>
+      <input type="text" name="tags" class="add-tags" placeholder="Добавьте теги">
+      
+      <div class="add-buttons">
+        <button type="submit" class="button add-button">
+          <svg class="icon icon-fire">
+            <use xlink:href="img/icons.svg#fire"></use>
+          </svg>
+          Опубликовать пост
+        </button>
+      </div>
+    </form>
+    <!-- /.add-post -->
+
     <aside class="sidebar">
       <div class="login">
         <form class="login-form">
@@ -143,7 +161,7 @@
           </li>
         </ul>
       </nav>
-      <a href="new-post.html" class="button button-new-post">
+      <a href="#" class="button button-new-post">
         <svg class="icon icon-fire">
           <use xlink:href="img/icons.svg#fire"></use>
         </svg>
