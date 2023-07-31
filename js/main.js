@@ -1,17 +1,35 @@
+
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD9OY14m7snDkd2NlEgocruw-MyPCxPBw0",
+  authDomain: "pikaba-4b751.firebaseapp.com",
+  projectId: "pikaba-4b751",
+  storageBucket: "pikaba-4b751.appspot.com",
+  messagingSenderId: "258654854687",
+  appId: "1:258654854687:web:ab0223abc3aacd1681ff2a"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+
+
 "use strict";
 
 
-// import validator from './validate.js';
 const menuToggle = document.querySelector('#menu-toggle');
 const menu = document.querySelector('.sidebar');
 
-const regExpValidEmail = /^\w+@\w+\.\w{2,}$/;
+const regExpValidEmail = /^[a-zA-Z0-9._-]+@\w+\.\w{2,}$/;
 
 const loginElem = document.querySelector('.login');
 const loginForm = document.querySelector('.login-form');
 const emailInput = document.querySelector('.login-email');
 const passwordInput = document.querySelector('.login-password');
 const loginSignup = document.querySelector('.login-signup');
+const loginForget = document.querySelector('.login-forget');
 
 const userElem = document.querySelector(".user");
 const userNameElem = document.querySelector(".user-name");
@@ -29,44 +47,52 @@ const postWrapper = document.querySelector('.posts');
 const buttonNewPost = document.querySelector('.button-new-post');
 const addPostElem = document.querySelector(".add-post");
 
-const listUsers = [
-  {
-    id: '01',
-    email : "kolstunnv@yandex.ru",
-    password: '12345',
-    displayName: "KoltsNik",
-    photo: 'https://sun9-21.userapi.com/impg/M6AQsOxaGSAhBiG5R3uTCJnERw9zEjkjnIOUAw/ro2cKreea04.jpg?size=1543x2160&quality=95&sign=3b231c08ae27ed1eda704de120b1b1d3&type=album'
-  },
-  {
-    id: '02',
-    email : "kate@yandex.ru",
-    password: '123456',
-    displayName: "katyParry",
-    photo: 'https://lyrictum.com/wp-content/uploads/2021/09/katy-perry-15.jpg',
-  }
-];
+const DEFAULT_PHOTO = userAvatarElem.src;
 
 const setUsers = {
   user: null,
+  initUser(handler){
+    firebase.auth().onAuthStateChanged(user => {
+      if (user){
+        this.user = user;
+      } else{
+        this.user = null;
+      }
+
+      if(handler){
+        handler();
+      }
+    })
+  },
 
   logIn(email, password, handler) {
     if (!regExpValidEmail.test(email)) {
       alert("E-mail не валиден");
       return;
     } 
-    const user = this.getUser(email);
 
-    if (user && user.password === password){
-      this.authorizedUser(user);
-      handler();
-    } else{
-      alert('Пользователь с такими данными не найден')
-    }
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .catch((err)=>{
+      const errCode = err.code;
+      const errMessage = err.message;
+      if (errCode === 'auth/wrong-password'){
+        console.log(errMessage);
+        alert('Неверный пароль');
+      } else if(errCode === 'auth/user-not-found'){
+        console.log(errMessage);
+        alert("Пользователь не найден");
+      }else{
+        alert(errMessage);
+      }
+
+      console.log(err);
+    })
+
+
   },
 
-  logOut(handler) {
-    this.user = null;
-    handler();
+  logOut() {
+    firebase.auth().signOut();
   },
 
   signUp(email, password, handler) {
@@ -80,75 +106,74 @@ const setUsers = {
       return
     }
 
-    if (!this.getUser(email)){
-      const user = { email, password, displayName: email.substring(0, email.indexOf('@')) }
-      listUsers.push(user);
-      this.authorizedUser(user);
-      handler();
-    }else{
-      alert('Пользователь с таким именем уже зарегистрирован')
+    firebase.auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(data=>{
+        this.editUser(email.substring(0, email.indexOf('@'), null, handler))
+      })
+      .catch((err)=>{
+        const errCode = err.code;
+        const errMessage = err.message;
+        if (errCode === 'auth/weak-password'){
+          console.log(errMessage);
+          alert('Слабый пароль');
+        } else if(errCode === 'auth/email-already-in-use'){
+          console.log(errMessage);
+          alert("Это email уже используется");
+        }else{
+          alert(errMessage);
+        }
+
+        console.log(err);
+      });
+
+  },
+
+  editUser(displayName, photoURL, handler){
+
+    const user = firebase.auth().currentUser;
+
+    if (displayName){
+      if(photoURL){
+        user.updateProfile({
+          displayName,
+          photoURL
+        }).then(handler)
+      } else{
+        user.updateProfile({
+          displayName
+        }).then(handler)
+      }
     }
   },
 
-  editUser(userName, userPhoto='', handler){
-    if (userName){
-      this.user.displayName = userName;
-    }
 
-    if(userPhoto){
-      this.user.photo = userPhoto;
-    }
-
-    handler();
-  },
-
-  getUser(email){
-    return listUsers.find(item => item.email === email)
-  },
-
-  authorizedUser(user){
-    this.user = user;
+  sendForget(email){
+    firebase.auth().sendPasswordResetEmail(email)
+      .then(()=>{
+        alert('Письмо отправлено!');
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
+
 };
 
 const setPosts = {
-  AllPosts: [
-    {
-      title: 'Плохо, когда одинаковые посты, набирают разные лайки',
-      text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первую подпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
-      tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: {
-        displayName: 'Katty Parry', 
-        photo: 'https://lyrictum.com/wp-content/uploads/2021/09/katy-perry-15.jpg',
-      },
-      date: '29.07.2023, 16:31',
-      likes: 6507,
-      comments: 226,
-    },
-    {
-      title: 'Плохо, когда одинаковые посты, набирают разные лайки',
-      text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первую подпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
-      tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: {
-        displayName: 'KoltsNik',
-        photo: 'https://sun9-21.userapi.com/impg/M6AQsOxaGSAhBiG5R3uTCJnERw9zEjkjnIOUAw/ro2cKreea04.jpg?size=1543x2160&quality=95&sign=3b231c08ae27ed1eda704de120b1b1d3&type=album'
-      },
-      date: '29.07.2023, 12:30',
-      likes: 45,
-      comments: 2,
-    },
-    
-  ],
+  AllPosts: [],
 
   addPost(title, text, tags, handler){
+    const user = firebase.auth().currentUser;
 
     this.AllPosts.unshift({
+      id: `postID${(+new Date().toString(16))}-${user.uid}`,
       title,
       text,
       tags: tags.split(',').map(item => item.trim()),
       author:{
         displayName: setUsers.user.displayName,
-        photo: setUsers.user.photo,
+        photo: setUsers.user.photoURL,
       },
       date: new Date().toLocaleString(navigator.language, 
         {
@@ -163,10 +188,19 @@ const setPosts = {
       comments: 0,
     });
 
-    if(handler){
-      handler();
-    }
+    firebase.database().ref('post').set(this.AllPosts)
+      .then(()=> this.getPosts(handler));
+
   },
+
+  getPosts(handeler){
+    firebase.database().ref('post').on('value', snapshort =>{
+      this.AllPosts = snapshort.val() || [];
+      handeler();
+    })
+  },
+
+
 };
 
 const toogleAuthDom = ()=>{
@@ -176,7 +210,7 @@ const toogleAuthDom = ()=>{
     loginElem.style.display = 'none';
     userElem.style.display = '';
     userNameElem.textContent = user.displayName;
-    userAvatarElem.src = user.photo || userAvatarElem.src;
+    userAvatarElem.src = user.photoURL || DEFAULT_PHOTO;
     buttonNewPost.classList.add('visible');
   }else{
     loginElem.style.display = '';
@@ -195,23 +229,29 @@ const showAddPost = ()=>{
 
 const showAllPosts= () =>{
 
-
-
   let postsHTML = '';
 
   setPosts.AllPosts.forEach((post) =>{
     const {title, text, date, author, tags, likes, comments} = post;
+    const paragraphs = text.split('\n');
+    let checkedTags = '';
+    
+    if (tags[0]==''){
+      checkedTags = '';
+    }else{
+      checkedTags = tags.map(tag => `<a href="#${tag}" class="tag">#${tag}</a>`).join("");
+    }
+  
 
     postsHTML += `
     <section class="post">
       <div class="post-body">
         <h2 class="post-title">${title}</h2>
-        <p class="post-text">
-          ${text}
-        </p>
+        ${paragraphs.map(paragraph => `<p class="post-text">${paragraph}</p>`).join('')}
+
 
         <div class="tags">
-          ${tags.map(tag => `<a href="#" class="tag">#${tag}</a>`).join("")}
+          ${checkedTags}
         </div>
         <!-- /.tags -->
       </div>
@@ -258,6 +298,7 @@ const showAllPosts= () =>{
       <!-- /.post-footer -->
     </section>
     `
+
   });
 
   postWrapper.innerHTML = postsHTML;
@@ -295,10 +336,17 @@ const init = () =>{
     setUsers.signUp(emailValue, passwordValue, toogleAuthDom);
     loginForm.reset();
   });
+
+  loginForget.addEventListener('click', event =>{
+    event.preventDefault();
+  
+    setUsers.sendForget(emailInput.value);
+    emailInput.value = '';
+  });  
   
   exitElem.addEventListener('click', event=>{
     event.preventDefault();
-    setUsers.logOut(toogleAuthDom);
+    setUsers.logOut();
   });
   
   editElem.addEventListener('click', (event)=>{
@@ -337,9 +385,11 @@ const init = () =>{
     addPostElem.classList.remove('visible');
     addPostElem.reset();
   });
+
+  setUsers.initUser(toogleAuthDom);
+  setPosts.getPosts(showAllPosts)
+  showAllPosts();
+
 }
 
 document.addEventListener('DOMContentLoaded', init());
-
-
-
